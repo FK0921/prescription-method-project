@@ -1,0 +1,14 @@
+{
+  "name": "prescription-method-project",
+  "version": "1.0.0",
+  "description": "药品使用方法查询",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.0",
+    "xlsx": "^0.18.5",
+    "cors": "^2.8.5"
+  }
+}
