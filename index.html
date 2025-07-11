@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>药品使用方法查询</title>
+</head>
+<body>
+  <h1>药品使用方法查询</h1>
+  <label for="patientId">请输入取药代码：</label>
+  <input type="text" id="patientId" placeholder="例如：001">
+  <button id="queryBtn">查询</button>
+  <div id="result" style="margin-top:20px;"></div>
+
+  <script>
+    document.getElementById('queryBtn').addEventListener('click', () => {
+      const patientId = document.getElementById('patientId').value.trim();
+      if (!patientId) {
+        alert('请输入取药代码');
+        return;
+      }
+      fetch(`/query?patientId=${encodeURIComponent(patientId)}`)
+        .then(res => res.json())
+        .then(data => {
+          const container = document.getElementById('result');
+          container.innerHTML = '';
+          if (data.error) {
+            container.textContent = data.error;
+            return;
+          }
+          data.medications.forEach(med => {
+            const section = document.createElement('section');
+            const title = document.createElement('h2');
+            title.textContent = med.name;
+            section.appendChild(title);
+            med.instructions.forEach(line => {
+              const p = document.createElement('p');
+              p.textContent = line;
+              section.appendChild(p);
+            });
+            container.appendChild(section);
+          });
+        })
+        .catch(err => {
+          console.error(err);
+          alert('查询出错，请稍后重试');
+        });
+    });
+  </script>
+</body>
+</html>
